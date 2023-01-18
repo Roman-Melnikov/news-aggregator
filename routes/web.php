@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,14 +16,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [HomeController::class, 'index'])
+    ->name('home');
 
 Route::get('/info', function () {
     return view('info');
 });
 
-Route::get('/news', function () {
-    return view('news');
-});
+Route::name('news.')
+    ->prefix('news')
+    ->group(function () {
+        Route::get('/', [NewsController::class, 'index'])
+            ->name('index');
+        Route::get('/{id}', [NewsController::class, 'show'])
+            ->name('one');
+    });
+
+Route::name('categories.')
+    ->prefix('categories')
+    ->group(function () {
+        Route::get('/', [CategoryController::class, 'index'])
+            ->name('index');
+        Route::get('/{id}', [CategoryController::class, 'show'])
+            ->name('one');
+    });

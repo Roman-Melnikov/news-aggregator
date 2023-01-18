@@ -1,3 +1,4 @@
-<a href="/">Главная</a>
+<a href="<?=route('home')?>">Главная</a>
 <a href="/info">Инфо</a>
-<a href="/news">Новости</a>
+<a href="<?=route('news.index')?>">Новости</a>
+<a href="<?=route('categories.index')?>">Категории</a>
