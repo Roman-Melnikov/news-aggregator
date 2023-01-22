@@ -1,6 +1,4 @@
-<?php
-include_once "menu.php";
-?>
+<?php include_once "menu.php" ?>
 <!doctype html>
 <html>
 <head>
@@ -8,14 +6,14 @@ include_once "menu.php";
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Новости</title>
+    <title>Категории</title>
 </head>
 <body>
-<h2>Новости</h2>
+<h2>Категории</h2>
 </body>
 </html>
-<?php foreach ($news as $item): ?>
+<?php foreach ($categories as $category): ?>
     <p>
-        <a href="<?= route('news.one', $item['id']) ?>"><?= $item['title'] ?></a>
+        <a href="<?= \route('categories.one', $category['id']) ?>"><?= $category['name'] ?></a>
     </p>
 <?php endforeach; ?>
