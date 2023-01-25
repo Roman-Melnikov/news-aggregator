@@ -7,23 +7,28 @@ class Categories
     private $categories = [
         [
             'id' => 1,
-            'name' => 'sport'
+            'name' => 'sport',
+            'description' => 'Новости про спорт'
         ],
         [
             'id' => 2,
-            'name' => 'wellness'
+            'name' => 'wellness',
+            'description' => 'Новости о здоровом образе жизни'
         ],
         [
             'id' => 3,
-            'name' => 'politics'
+            'name' => 'politics',
+            'description' => 'Новости о политике'
         ],
         [
             'id' => 4,
-            'name' => 'culture'
+            'name' => 'culture',
+            'description' => 'Новости культуры'
         ],
         [
             'id' => 5,
-            'name' => 'travel'
+            'name' => 'travel',
+            'description' => 'О путешествиях'
         ],
     ];
 

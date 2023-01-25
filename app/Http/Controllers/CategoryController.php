@@ -4,17 +4,18 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\Categories;
 
 class CategoryController extends Controller
 {
 
-    public function index(): \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+    public function index(): View
     {
         $categories = new Categories();
 
-        return \view('categories', [
+        return \view('categories.index', [
             'categories' => $categories->getCategories()
         ]);
     }
@@ -24,7 +25,7 @@ class CategoryController extends Controller
         $categoryNews = News::getNewsByICategoryId($id);
         $name = (new Categories())->getNameByCategoryId($id);
 
-        return \view('categoryNews', [
+        return \view('categories.show', [
             'categoryNews' => $categoryNews,
             'name' => $name
         ]);
