@@ -11,12 +11,12 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::getNews();
-        return \view('news')->with('news', $news);
+        return \view('news.index')->with('news', $news);
     }
 
     public function show(int $id)
     {
         $newsOne = News::getNewsById($id);
-        return \view('newsOne')->with('newsOne', $newsOne);
+        return \view('news.show')->with('newsOne', $newsOne);
     }
 }
