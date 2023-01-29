@@ -5,6 +5,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\IndexController as AdminController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,8 +29,10 @@ Route::get('/info', function () {
 })->name('info');
 
 //admin routes
-Route::group(['prefix' => 'admin'], static function(){
-    Route::get('/', AdminController::class)->name('admin.index');
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], static function(){
+    Route::get('/', AdminController::class)->name('index');
+    Route::resource('categories', AdminCategoryController::class);
+    Route::resource('news', AdminNewsController::class);
 });
 
 Route::group(['prefix' => 'news'], static function() {
@@ -42,3 +48,6 @@ Route::name('categories.')
         Route::get('/{id}', [CategoryController::class, 'show'])
             ->name('one');
     });
+
+Route::resource('feedback', FeedbackController::class);
+Route::resource('subscription', SubscriptionController::class);
