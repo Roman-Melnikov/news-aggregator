@@ -2,19 +2,19 @@
     <div class="sidebar-sticky">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" href="{{route('home')}}">
+                <a class="nav-link @if(\request()->routeIs('admin.index')) active @endif" href="{{route('admin.index')}}">
                     <span data-feather="home"></span>
                     Главная <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('news.index')}}">
+                <a class="nav-link @if(\request()->routeIs('admin.news.*')) active @endif" href="{{route('admin.news.create')}}">
                     <span data-feather="file"></span>
                     Новости
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('categories.index')}}">
+                <a class="nav-link @if(\request()->routeIs('admin.categories.*')) active @endif" href="#">
                     <span data-feather="shopping-cart"></span>
                     Категории
                 </a>

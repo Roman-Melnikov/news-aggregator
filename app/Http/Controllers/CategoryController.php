@@ -11,10 +11,8 @@ use App\Models\Categories;
 class CategoryController extends Controller
 {
 
-    public function index(): View
+    public function index(Categories $categories): View
     {
-        $categories = new Categories();
-
         return \view('categories.index', [
             'categories' => $categories->getCategories()
         ]);

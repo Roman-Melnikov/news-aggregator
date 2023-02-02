@@ -2,19 +2,25 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{{route('home')}}">Главная</a>
+                <a class="nav-link @if (request()->routeIs('home')) active @endif" href="{{route('home')}}">Главная</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('news.index')}}">Новости</a>
+                <a class="nav-link @if (request()->routeIs('news.index')) active @endif" href="{{route('news.index')}}">Новости</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('categories.index')}}">Категории</a>
+                <a class="nav-link @if (request()->routeIs('categories.index')) active @endif" href="{{route('categories.index')}}">Категории</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('info')}}">О проекте</a>
+                <a class="nav-link @if (request()->routeIs('info')) active @endif" href="{{route('info')}}">О проекте</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.index')}}">Админка</a>
+                <a class="nav-link @if (request()->routeIs('admin.index')) active @endif" href="{{route('admin.index')}}">Админка</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @if (request()->routeIs('feedback.create')) active @endif" href="{{route('feedback.create')}}">Оставить отзыв</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @if (request()->routeIs('subscription.create')) active @endif" href="{{route('subscription.create')}}">Подписка</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
