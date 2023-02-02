@@ -4,19 +4,21 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\News;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function index(News $news): View
     {
-        $news = News::getNews();
-        return \view('news.index')->with('news', $news);
+        return \view('news.index', [
+            'news' => $news->getNews(),
+        ]);
     }
 
-    public function show(int $id)
+    public function show(int $id, News $news): View
     {
-        $newsOne = News::getNewsById($id);
-        return \view('news.show')->with('newsOne', $newsOne);
+        return \view('news.show', [
+            'newsOne' => $news->getNewsById($id),
+        ]);
     }
 }

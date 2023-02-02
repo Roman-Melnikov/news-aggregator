@@ -7,10 +7,10 @@
             </h3>
 
             <div class="blog-post">
-                <h2 class="blog-post-title">{{ $newsOne['title'] }}</h2>
-                <p class="blog-post-meta">{{ $newsOne['created_at'] }}<a href="#">{{ $newsOne['author'] }}</a></p>
+                <h2 class="blog-post-title">{{ $newsOne->title }}</h2>
+                <p class="blog-post-meta">{{ $newsOne->created_at }}<a href="#">{{ $newsOne->author }}</a></p>
                 <p>
-                    {{ $newsOne['description'] }}
+                    {{ $newsOne->description }}
                 </p>
             </div><!-- /.blog-post -->
 
