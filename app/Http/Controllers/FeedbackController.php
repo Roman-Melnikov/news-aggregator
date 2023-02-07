@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Feedback;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -34,16 +36,15 @@ class FeedbackController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $userName = $request->input('name');
-        $comment = $request->input('comment');
-        Storage::disk('local')
-            ->append(
-                'feedback.json',
-                json_encode([$userName => $comment], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
-            );
-        return \redirect()->route('feedback.create');
+        $feedback = new Feedback($request->except('_token'));
+
+        if ($feedback->save()) {
+            return \redirect()->route('feedback.create')->with('success', 'Отзыв успешно отправлен');
+        }
+
+        return \back('error', 'Не удалось отправить отзыв');
     }
 
     /**

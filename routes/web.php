@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\Admin\SourcesController as AdminSourcesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,21 +34,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], static function(){
     Route::get('/', AdminController::class)->name('index');
     Route::resource('categories', AdminCategoryController::class);
     Route::resource('news', AdminNewsController::class);
+    Route::resource('sources', AdminSourcesController::class);
 });
 
-Route::group(['prefix' => 'news'], static function() {
-    Route::get('/', [NewsController::class, 'index'])->name('news.index');
-    Route::get('/{id}', [NewsController::class, 'show'])->name('news.one');
-});
+Route::resource('news', NewsController::class);
+//Route::group(['prefix' => 'news'], static function() {
+//    Route::get('/', [NewsController::class, 'index'])->name('news.index');
+//    Route::get('/{id}', [NewsController::class, 'show'])->name('news.one');
+//});
 
-Route::name('categories.')
-    ->prefix('categories')
-    ->group(function () {
-        Route::get('/', [CategoryController::class, 'index'])
-            ->name('index');
-        Route::get('/{id}', [CategoryController::class, 'show'])
-            ->name('one');
-    });
+Route::resource('categories', CategoryController::class);
+//Route::name('categories.')
+//    ->prefix('categories')
+//    ->group(function () {
+//        Route::get('/', [CategoryController::class, 'index'])
+//            ->name('index');
+//        Route::get('/{category}', [CategoryController::class, 'show'])
+//            ->name('one');
+//    });
 
 Route::resource('feedback', FeedbackController::class);
 Route::resource('subscription', SubscriptionController::class);

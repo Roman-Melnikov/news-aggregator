@@ -5,7 +5,6 @@
             <h3 class="pb-3 mb-4 font-italic border-bottom">
                 From the Firehose
             </h3>
-
             <div class="blog-post">
                 <h2 class="blog-post-title">{{ $newsOne->title }}</h2>
                 <p class="blog-post-meta">{{ $newsOne->created_at }}<a href="#">{{ $newsOne->author }}</a></p>
