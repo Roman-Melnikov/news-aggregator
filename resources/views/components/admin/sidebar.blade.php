@@ -8,7 +8,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link @if(\request()->routeIs('admin.news.*')) active @endif" href="{{route('admin.news.create')}}">
+                <a class="nav-link @if(\request()->routeIs('admin.news.*')) active @endif" href="{{route('admin.news.index')}}">
                     <span data-feather="file"></span>
                     Новости
                 </a>

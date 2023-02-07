@@ -4,52 +4,41 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-class News
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+
+class News extends Model
 {
+    use HasFactory;
 
-    public static function getNews(): array
+    protected $table = 'news';
+
+    public function getNews(): Collection
     {
-        $quantityCategories = 5;
-        $quantityNewsOneCategory = 4;
+        return DB::table($this->table)->get();
+    }
 
-        for ($i = 1; $i <= $quantityCategories; $i++) {
-            for ($j = 1; $j <= $quantityNewsOneCategory; $j++) {
-                $id = 0;
-                $news[] = [
-                    'id' => ++$id,
-                    'title' => \fake()->jobTitle(),
-                    'description' => \fake()->realText(100),
-                    'author' => \fake()->userName(),
-                    'created_at' => \now()->format('d-m-Y H:m'),
-                    'category_id' => $i
-                ];
-            }
+    public function getNewsById(int $id): mixed
+    {
+        $news = DB::table($this->table)->find($id);
+
+        if (empty($news)) {
+            return redirect()->route('news.index');
         }
         return $news;
     }
 
-    public static function getNewsById(int $id): ?array
+    public function getNewsByCategoryId(int $id): Collection
     {
-        $news = static::getNews();
+        $news = DB::table($this->table)
+            ->join('category_has_news', $this->table . '.id', '=', 'category_has_news.news_id')
+            ->join('categories', 'category_has_news.category_id', '=', 'categories.id')
+            ->where('categories.id', '=', $id)
+            ->select([$this->table . '.*', 'categories.title as category_name'])
+            ->get();
 
-        foreach ($news as $item) {
-            if ($item['id'] === $id) {
-                return $item;
-            }
-        }
-        return null;
-    }
-
-    public static function getNewsByICategoryId(int $id): array
-    {
-        $news = static::getNews();
-
-        $categoryNews = [];
-        foreach ($news as $item) {
-            if ($item['category_id'] === $id) {
-                $categoryNews[] = $item;
-            }
-        }
-        return $categoryNews;
+        return $news;
     }
 }

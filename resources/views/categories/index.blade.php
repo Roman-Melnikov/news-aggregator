@@ -10,10 +10,10 @@
                     <div class="card-body d-flex flex-column align-items-start">
                         <h3 class="mb-0">
                             <a class="text-dark"
-                               href="{{ route('categories.one', $item['id']) }}">{{ $item['name'] }}</a>
+                               href="{{ route('categories.one', $item->id) }}">{{ $item->title }}</a>
                         </h3>
-                        <p class="card-text mb-auto">{!! $item['description'] !!}</p>
-                        <a href="{{ route('categories.one', $item['id']) }}">Смотреть новости категории</a>
+                        <p class="card-text mb-auto">{!! $item->description !!}</p>
+                        <a href="{{ route('categories.one', $item->id) }}">Смотреть новости категории</a>
                     </div>
                     <img class="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb"
                          alt="Card image cap">
