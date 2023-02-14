@@ -15,10 +15,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sourses', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('url');
+            $table->string('phone', 14)->nullable();
+            $table->string('email')->unique();
+            $table->text('description');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sourses');
+        Schema::dropIfExists('subscriptions');
     }
 };

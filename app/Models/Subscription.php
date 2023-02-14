@@ -7,14 +7,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Sourse extends Model
+class Subscription extends Model
 {
     use HasFactory;
 
-    protected $table = 'sourses';
+    protected $table = 'subscriptions';
 
     protected $fillable = [
         'name',
-        'url',
+        'phone',
+        'email',
+        'description',
     ];
 }

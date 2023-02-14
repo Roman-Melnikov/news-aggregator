@@ -15,10 +15,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sourses', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 100);
-            $table->string('url');
+        Schema::table('news', function (Blueprint $table) {
+            $table->string('image', 255)->nullable();
         });
     }
 
@@ -29,6 +27,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sourses');
+        Schema::table('news', function (Blueprint $table) {
+            $table->dropColumn('image');
+        });
     }
 };

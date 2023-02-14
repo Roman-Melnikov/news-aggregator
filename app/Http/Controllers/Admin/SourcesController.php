@@ -2,24 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Subscription;
+use App\Http\Controllers\Controller;
+use App\Models\Sourse;
+use App\QueryBuilders\SourcesQueryBuilder;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
-class SubscriptionController extends Controller
+class SourcesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(SourcesQueryBuilder $sourcesQueryBuilder): View
     {
-        //
+        return \view('admin.sources.index', [
+            'sourcesList' => $sourcesQueryBuilder->getAllWithPagination(),
+        ]);
     }
 
     /**
@@ -29,7 +32,7 @@ class SubscriptionController extends Controller
      */
     public function create(): View
     {
-        return \view('subscription');
+        return \view('admin.sources.create');
     }
 
     /**
@@ -40,13 +43,13 @@ class SubscriptionController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $subscription = new Subscription($request->except('_token'));
+        $source = new Sourse($request->except('_token'));
 
-        if ($subscription->save()) {
-            return \redirect()->route('subscription.create')->with('success', 'запрос отправлен успешно');
+        if ($source->save()) {
+            return \redirect()->route('admin.sources.index')->with('success', 'Источник успешно добавлен');
         }
 
-        return \back()->with('error', 'не удалось отправить запрос');
+        return \back()->with('error', 'Не удалось добавить источник');
     }
 
     /**
@@ -66,9 +69,11 @@ class SubscriptionController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Sourse $source): View
     {
-        //
+        return \view('admin.sources.edit', [
+            'source' => $source,
+        ]);
     }
 
     /**
@@ -78,9 +83,15 @@ class SubscriptionController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Sourse $source): RedirectResponse
     {
-        //
+        $source = $source->fill($request->except('_token'));
+
+        if ($source->save()) {
+            return \redirect()->route('admin.sources.index')->with('success', 'Источник успешно обновлён');
+        }
+
+        return \back()->with('error', 'Не удалось обновить источник');
     }
 
     /**

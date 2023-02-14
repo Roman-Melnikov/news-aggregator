@@ -6,8 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
@@ -15,18 +14,18 @@ class Category extends Model
 
     protected $table = 'categories';
 
-    public function getCategories(): Collection
-    {
-        return DB::table($this->table)->get();
-    }
+    protected $fillable = [
+        'title',
+        'description',
+    ];
 
-    public function getNameByCategoryId(int $id): ?string
+    public function news(): BelongsToMany
     {
-        $name = (DB::table($this->table)
-            ->where($this->table . '.id', '=', $id)
-            ->select('title')
-            ->get());
-
-        return $name[0]->title;
+        return $this->belongsToMany(
+            News::class,
+            'category_has_news',
+            'category_id',
+            'news_id'
+        );
     }
 }
