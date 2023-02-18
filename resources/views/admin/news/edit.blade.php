@@ -6,12 +6,18 @@
         </div>
     </div>
     <div>
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                <x-alert type="danger" :message="$error"></x-alert>
+            @endforeach
+        @endif
         <form method="post" action="{{ route('admin.news.update', ['news' => $news]) }}">
             @csrf
             @method('put')
             <div class="form-group">
                 <label for="category_ids">Категория</label>
-                <select class="form-control" name="category_ids[]" id="category_ids" multiple>
+                <select class="form-control @error('category_ids') is-invalid @enderror" name="category_ids[]"
+                        id="category_ids" multiple>
                     <option value="0">--Выбрать--</option>
                     @foreach($categories as $category)
                         <option @if(in_array($category->id, $news->categories->pluck('id')->toArray()))
@@ -25,15 +31,17 @@
             </div>
             <div class="form-group">
                 <label for="title">Заголовок</label>
-                <input type="text" id="title" name="title" class="form-control" value="{{ $news->title }}">
+                <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
+                       value="{{ $news->title }}">
             </div>
             <div class="form-group">
                 <label for="author">Автор</label>
-                <input type="text" id="author" name="author" class="form-control" value="{{ $news->author }}">
+                <input type="text" class="form-control @error('author') is-invalid @enderror" id="author" name="author"
+                       value="{{ $news->author }}">
             </div>
             <div class="form-group">
                 <label for="status">Статус</label>
-                <select class="form-control" name="status" id="status">
+                <select class="form-control @error('status') is-invalid @enderror" name="status" id="status">
                     @foreach($statuses as $status)
                         <option @if($news->status === $status) selected @endif>{{$status}}</option>
                     @endforeach
@@ -45,7 +53,8 @@
             </div>
             <div class="form-group">
                 <label for="description">Описание</label>
-                <textarea class="form-control" id="description" name="description">{!! $news->description !!}</textarea>
+                <textarea class="form-control @error('description') is-invalid @enderror" id="description"
+                          name="description">{!! $news->description !!}</textarea>
             </div>
             <br>
             <button type="submit" class="btn btn-success">Сохранить</button>

@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Category\EditRequest;
 use App\Models\Category;
 use App\QueryBuilders\CategoriesQueryBuilder;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Http\Requests\Category\CreateRequest;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -39,24 +43,24 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): RedirectResponse
+    public function store(CreateRequest $request): RedirectResponse
     {
-        $category = new Category($request->except('_token'));
+        $category = new Category($request->validated());
 
         if ($category->save()) {
-            return \redirect()->route('admin.categories.index')->with('success', 'Категория успешно добавлена');
+            return \redirect()->route('admin.categories.index')->with('success', __('messages.admin.categories.create.success'));
         }
 
-        return \back()->with('error', 'Не удалось добавить категорию');
+        return \back()->with('error', __('messages.admin.categories.create.fail'));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -67,7 +71,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Category $category): View
@@ -80,29 +84,37 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category): RedirectResponse
+    public function update(EditRequest $request, Category $category): RedirectResponse
     {
-        $category = $category->fill($request->except('_token'));
+        $category = $category->fill($request->validated());
 
         if ($category->save()) {
-            return redirect()->route('admin.categories.edit', ['category' => $category])->with('success', 'Категория успешно обновлена');
+            return redirect()
+                ->route('admin.categories.edit', ['category' => $category])
+                ->with('success', __('messages.admin.categories.update.success'));
         }
 
-        return \back()->with('error', 'Не удалось обновить категорию');
+        return \back()->with('error', __('messages.admin.categories.update.fail'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category): JsonResponse
     {
-        //
+        try {
+            $category->delete();
+            return \response()->json('ok');
+        } catch (\Exception $exception) {
+            Log::error($exception->getMessage(), [$exception]);
+            return \response()->json('error', '400');
+        }
     }
 }

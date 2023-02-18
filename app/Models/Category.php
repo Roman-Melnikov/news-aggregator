@@ -18,14 +18,4 @@ class Category extends Model
         'title',
         'description',
     ];
-
-    public function news(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            News::class,
-            'category_has_news',
-            'category_id',
-            'news_id'
-        );
-    }
 }

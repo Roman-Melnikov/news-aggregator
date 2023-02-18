@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\NewsStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\News\CreateRequest;
+use App\Http\Requests\News\EditRequest;
 use App\Models\News;
 use App\QueryBuilders\CategoriesQueryBuilder;
 use App\QueryBuilders\NewsQueryBuilder;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class NewsController extends Controller
 {
@@ -45,18 +49,15 @@ class NewsController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): RedirectResponse
+    public function store(CreateRequest $request): RedirectResponse
     {
-        $request->validate([
-            'title' => 'required',
-        ]);
-
-        $news = new News($request->except('_token', 'category_id'));
+        $news = new News($request->validated());//News::create($request->validated())
 
         if ($news->save()) {
-            return \redirect()->route('admin.news.index')->with('success', 'Новость успешно добавлена');
+            $news->categories()->attach($request->getCategoryIds());
+            return \redirect()->route('admin.news.index')->with('success', __('messages.admin.news.create.success'));
         }
-        return \back()->with('error', 'Не удалось сохранить запись');
+        return \back()->with('error', __('messages.admin.news.create.fail'));
     }
 
     /**
@@ -93,17 +94,17 @@ class NewsController extends Controller
      * @param News $news
      * @return RedirectResponse
      */
-    public function update(Request $request, News $news): RedirectResponse
+    public function update(EditRequest $request, News $news): RedirectResponse
     {
-        $news = $news->fill($request->except('_token', 'category_ids'));
+        $news = $news->fill($request->validated());
 
         if ($news->save()) {
-            $news->categories()->sync($request->input('category_ids'));
+            $news->categories()->sync($request->getCategoryIds());
             return \redirect(route('admin.news.index'))
-                ->with('success', 'Новость успешно обновлена');
+                ->with('success', __('messages.admin.news.create.success'));
         }
 
-        return \back()->with('error', 'Не удалось обновить запись');
+        return \back()->with('error', __('messages.admin.news.update.fail'));
     }
 
     /**
@@ -112,8 +113,16 @@ class NewsController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(News $news): JsonResponse
     {
-        //
+        try {
+            $news->delete();
+
+            return \response()->json('ok');
+        } catch (\Exception $exception) {
+            Log::error($exception->getMessage(), [$exception]);
+
+            return \response()->json('error', '400');
+        }
     }
 }
