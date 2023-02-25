@@ -6,11 +6,17 @@
         </div>
     </div>
     <div>
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                <x-alert type="danger" :message="$error"></x-alert>
+            @endforeach
+        @endif
         <form method="post" action="{{ route('admin.news.store') }}">
             @csrf
             <div class="form-group">
-                <label for="category">Категория</label>
-                <select class="form-control" name="category" id="category">
+                <label for="category_ids">Категория</label>
+                <select class="form-control @error('category_ids') is-invalid @enderror" name="category_ids[]"
+                        id="category_ids" multiple>
                     <option value="0">--Выбрать--</option>
                     @foreach($categories as $category)
                         <option @if((int)old('category_id') === $category->id)
@@ -24,15 +30,17 @@
             </div>
             <div class="form-group">
                 <label for="title">Заголовок</label>
-                <input type="text" id="title" name="title" class="form-control" value="{{ old('title') }}">
+                <input type="text" id="title" name="title" class="form-control @error('title') is-invalid @enderror"
+                       value="{{ old('title') }}">
             </div>
             <div class="form-group">
                 <label for="author">Автор</label>
-                <input type="text" id="author" name="author" class="form-control" value="{{ old('author') }}">
+                <input type="text" id="author" name="author" class="form-control @error('author') is-invalid @enderror"
+                       value="{{ old('author') }}">
             </div>
             <div class="form-group">
                 <label for="status">Статус</label>
-                <select class="form-control" name="status" id="status">
+                <select class="form-control @error('status') is-invalid @enderror" name="status" id="status">
                     @foreach($statuses as $status)
                         <option @if(old('status') === $status) selected @endif>{{$status}}</option>
                     @endforeach
@@ -44,7 +52,8 @@
             </div>
             <div class="form-group">
                 <label for="description">Описание</label>
-                <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
+                <textarea class="form-control @error('description') is-invalid @enderror" id="description"
+                          name="description">{{ old('description') }}</textarea>
             </div>
             <br>
             <button type="submit" class="btn btn-success">Сохранить</button>
