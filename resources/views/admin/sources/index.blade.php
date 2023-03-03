@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered text-center">
             <thead>
             <tr>
                 <th>#ID</th>
@@ -22,9 +22,12 @@
                 <tr>
                     <td>{{$source->id}}</td>
                     <td>{{$source->name}}</td>
-                    <td>{{$source->url}}</td>
+                    <td class="text-left">{{$source->url}}</td>
                     <td>{{$source->created_at}}</td>
-                    <td><a href="{{route('admin.sources.edit', ['source' => $source])}}">Изм.</a> &nbsp; <a href="#" style="color: red;">Уд.</a></td>
+                    <td>
+                        <a href="{{route('admin.sources.edit', ['source' => $source])}}">Изм.</a> &nbsp;
+                        <a href="#" style="color: red;">Уд.</a>
+                    </td>
                 </tr>
             @empty
                 <tr>

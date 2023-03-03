@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered text-center">
             <thead>
             <tr>
                 <th>#ID</th>

@@ -6,7 +6,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -14,8 +15,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('news', static function (Blueprint $table): void {
-            $table->string('image', 255)->nullable();
+        Schema::table('users', static function (Blueprint $table): void {
+            $table->boolean('is_admin')->after('id')->default(false);
         });
     }
 
@@ -26,8 +27,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('news', static function (Blueprint $table): void {
-            $table->dropColumn('image');
+        Schema::table('users', static function (Blueprint $table): void {
+            $table->dropColumn('is_admin');
         });
     }
 };
