@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\SourcesController as AdminSourcesController;
 use App\Http\Controllers\Account\IndexController as AccountController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\ParserController;
+use App\Http\Controllers\Auth\SocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,7 @@ Route::group(['middleware' => 'auth'], static function () {
     //admin routes
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'is.admin'], static function () {
         Route::get('/', AdminController::class)->name('index');
+        Route::get('/parser', ParserController::class)->name('parser');
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('news', AdminNewsController::class);
         Route::resource('sources', AdminSourcesController::class);
@@ -68,5 +71,11 @@ Route::resource('feedback', FeedbackController::class);
 Route::resource('subscription', SubscriptionController::class);
 
 Auth::routes();
+
+//auth.social
+Route::group(['middleware' => 'guest'], static function () {
+    Route::get('/auth/redirect/{driver}', [SocialController::class, 'redirect'])->name('auth.social.redirect');
+    Route::get('/auth/callback/{driver}', [SocialController::class, 'callback']);
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
