@@ -39,7 +39,7 @@ class ParserService implements IParser
                     'uses' => 'channel.image.url'
                 ],
                 'item' => [
-                    'uses' => 'channel.item[guid,link,title,pubDate,description,author,category,]'
+                    'uses' => 'channel.item[guid,title,link,pubDate,description,category,author]'
                 ],
             ]
         );
@@ -50,7 +50,7 @@ class ParserService implements IParser
         foreach ($parseData['item'] as $item) {
             $news = new News([
                 'title' => $item['title'],
-                'author' => $parseData['title'],
+                'author' => $item['title'],
                 'status' => 'active',
                 'description' => $item['description'],
                 'created_at' => $item['pubDate'],

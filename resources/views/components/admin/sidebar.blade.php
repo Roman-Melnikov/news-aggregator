@@ -5,7 +5,7 @@
                 <a class="nav-link @if(\request()->routeIs('admin.index')) active @endif"
                    href="{{route('admin.index')}}">
                     <span data-feather="home"></span>
-                    Главная <span class="sr-only">(current)</span>
+                    Панель управления <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
