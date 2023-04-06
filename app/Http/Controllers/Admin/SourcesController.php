@@ -8,8 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Sourse;
 use App\QueryBuilders\SourcesQueryBuilder;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SourcesController extends Controller
 {
@@ -97,11 +99,17 @@ class SourcesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Sourse $source
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Sourse $source): JsonResponse
     {
-        //
+        try {
+            $source->delete();
+            return \response()->json('ok');
+        } catch (\Exception $exception) {
+            Log::error($exception->getMessage(), [$exception]);
+            return \response()->json('error', '400');
+        }
     }
 }

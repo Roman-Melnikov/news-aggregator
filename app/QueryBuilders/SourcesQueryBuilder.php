@@ -24,7 +24,7 @@ final class SourcesQueryBuilder extends QueryBuilder
 
     public function getAll(): Collection
     {
-        $this->model->get();
+        return $this->model->get();
     }
 
     public function getAllWithPagination(int $quantity = 10): LengthAwarePaginator

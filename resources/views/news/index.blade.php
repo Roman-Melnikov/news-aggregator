@@ -16,7 +16,10 @@
                         <p class="card-text mb-auto">{!! $item->description !!}</p>
                         <a href="{{ route('news.show', $item->id) }}">Читать далее</a>
                     </div>
-                    <img class="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb"
+                    <img src="{{Storage::disk('public')->url($item->image)}}"
+                         class="card-img-right flex-auto d-none d-md-block"
+                         style="width: 250px;height: 250px"
+                         data-src="holder.js/200x250?theme=thumb"
                          alt="Card image cap">
                 </div>
             </div>

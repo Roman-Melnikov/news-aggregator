@@ -7,8 +7,10 @@ namespace App\Providers;
 use App\QueryBuilders\CategoriesQueryBuilder;
 use App\QueryBuilders\NewsQueryBuilder;
 use App\QueryBuilders\QueryBuilder;
+use App\QueryBuilders\SourcesQueryBuilder;
 use App\Services\Contracts\IParser;
 use App\Services\ParserService;
+use App\Services\UploadService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Contracts\ISocial;
@@ -26,10 +28,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(QueryBuilder::class, CategoriesQueryBuilder::class);
         $this->app->bind(QueryBuilder::class, NewsQueryBuilder::class);
+        $this->app->bind(QueryBuilder::class, SourcesQueryBuilder::class);
 
         //services
         $this->app->bind(IParser::class, ParserService::class);
         $this->app->bind(ISocial::class, SocialService::class);
+        $this->app->bind(UploadService::class);
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\NewsStatus;
@@ -9,10 +11,10 @@ use App\Http\Requests\News\EditRequest;
 use App\Models\News;
 use App\QueryBuilders\CategoriesQueryBuilder;
 use App\QueryBuilders\NewsQueryBuilder;
+use App\Services\UploadService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class NewsController extends Controller
@@ -94,9 +96,19 @@ class NewsController extends Controller
      * @param News $news
      * @return RedirectResponse
      */
-    public function update(EditRequest $request, News $news): RedirectResponse
+    public function update(
+        EditRequest   $request,
+        News          $news,
+        UploadService $uploadService,
+    ): RedirectResponse
     {
-        $news = $news->fill($request->validated());
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $uploadService->uploadImage($request->file('image'));
+        }
+
+        $news = $news->fill($validated);
 
         if ($news->save()) {
             $news->categories()->sync($request->getCategoryIds());
@@ -110,8 +122,8 @@ class NewsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param News $news
+     * @return JsonResponse
      */
     public function destroy(News $news): JsonResponse
     {

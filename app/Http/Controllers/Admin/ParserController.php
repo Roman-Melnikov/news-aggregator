@@ -1,25 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Services\Contracts\IParser;
-use Illuminate\Http\Request;
+use App\Jobs\JobNewsParsing;
+use App\QueryBuilders\SourcesQueryBuilder;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 
 class ParserController extends Controller
 {
     /**
-     * Handle the incoming request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param SourcesQueryBuilder $sourcesQueryBuilder
+     * @return Application|RedirectResponse|Redirector
      */
-    public function __invoke(Request $request, IParser $parser)
+    public function __invoke(SourcesQueryBuilder $sourcesQueryBuilder): Application|RedirectResponse|Redirector
     {
-        $data = $parser
-            ->setLink('https://www.cnews.ru/inc/rss/news_top.xml')
-            ->getParseData();
+        $sources = $sourcesQueryBuilder->getAll();
 
-        $parser->store($data);
+        foreach ($sources as $source) {
+            \dispatch(new JobNewsParsing($source->url));
+        }
+
+        return \redirect(route('admin.index'));
     }
 }
